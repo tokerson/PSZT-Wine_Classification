@@ -13,25 +13,41 @@ class Network:
     def __init__(self, hidden_neurons = 20):
         self.number_of_inputs = 12
         self.hidden_neurons = hidden_neurons
-        self.inputs = np.random.randint(0 , 11,  self.number_of_inputs) 
-        self.hidden_layer = [ { 'weights': np.random.uniform(0.0, 1.0, self.number_of_inputs), 
+        self.inputs = np.random.randint(low = 0 , high = 11, size = self.number_of_inputs) # array of random integers from 0 to 10 
+        self.hidden_layer = [ { 'weights': np.random.uniform(low = -1.0, high = 1.0, size = self.number_of_inputs),  
                                 'bias': np.random.uniform()} for i in range(self.hidden_neurons) ]
         
-    def sigmoid(x):
+    def sigmoid(self, x):
         return 1/(1 + np.exp(-x))
 
-    def calculate_the_value(self):
-        return self.inputs[0] * self.hidden_layer[0]['weights'][0] + self.hidden_layer[0]['bias']
+    def feed_forward(self):
+        result = [0] * self.hidden_neurons  #creating an array of size equals to hidden neurons number and filled with zeros.
+        #foreach hidden neuron we are calculating its output based on the weights of the edges
+        for j in range(0, self.hidden_neurons):
 
+            for i in range(0, self.number_of_inputs):
+                result[j] += self.inputs[i] * self.hidden_layer[j]['weights'][i] 
+            
+            result[j] += self.hidden_layer[j]['bias']
+            result[j] = self.sigmoid(result[j])
+        
+        return result
 
 network = Network()
-print(network.inputs[0])
-print(network.hidden_layer[0]['weights'][0])
-print(network.hidden_layer[0]['bias'])
 
-print(network.calculate_the_value())
+print("inputs:")
+print(network.inputs)
+print("weights:")
+for neuron in network.hidden_layer:
+    print("Weights: \n", neuron['weights'])
+    print("Bias: ", neuron['bias'])
+    
+print(network.feed_forward())
+# print("Bias:", network.hidden_layer[0]['bias'])
+
+# print("Result:", network.feed_forward(0))
 # print(network.inputs)
-# print(network.hidden_layer[0])
+# print(network.hidden_layer)
 # print(network.hidden_layer[0]['weights'][0])
     
 
