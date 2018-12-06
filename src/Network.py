@@ -14,13 +14,20 @@ class Network:
         self.number_of_inputs = 12
         self.hidden_neurons = hidden_neurons
         self.inputs = np.random.randint(low = 0 , high = 11, size = self.number_of_inputs) # array of random integers from 0 to 10 
-        self.hidden_layer = [ { 'weights': np.random.uniform(low = -1.0, high = 1.0, size = self.number_of_inputs),  
+        self.hidden_layer = [ { 'weights': np.random.uniform(low = -1.0 / np.sqrt(self.number_of_inputs), 
+                                                             high = 1.0 / np.sqrt(self.number_of_inputs), 
+                                                             size = self.number_of_inputs),  
                                 'bias': np.random.uniform()} for i in range(self.hidden_neurons) ]
+        self.output_neuron =  { 'weights':  np.random.uniform(low = -1.0 / np.sqrt(self.hidden_neurons), 
+                                                             high = 1.0 / np.sqrt(self.hidden_neurons)  , 
+                                                             size = self.hidden_neurons),
+                                 'bias' : np.random.uniform()}
         
     def sigmoid(self, x):
         return 1/(1 + np.exp(-x))
 
     def feed_forward(self):
+        output = 0.0
         result = [0] * self.hidden_neurons  #creating an array of size equals to hidden neurons number and filled with zeros.
         #foreach hidden neuron we are calculating its output based on the weights of the edges
         for j in range(0, self.hidden_neurons):
@@ -31,7 +38,11 @@ class Network:
             result[j] += self.hidden_layer[j]['bias']
             result[j] = self.sigmoid(result[j])
         
-        return result
+        for i in range(0, self.hidden_neurons):
+            output += result[i] * self.output_neuron['weights'][i]
+
+        output += self.output_neuron['bias']
+        return self.sigmoid(output)
 
 network = Network()
 
@@ -42,7 +53,7 @@ for neuron in network.hidden_layer:
     print("Weights: \n", neuron['weights'])
     print("Bias: ", neuron['bias'])
     
-print(network.feed_forward())
+print("Output", network.feed_forward())
 # print("Bias:", network.hidden_layer[0]['bias'])
 
 # print("Result:", network.feed_forward(0))
