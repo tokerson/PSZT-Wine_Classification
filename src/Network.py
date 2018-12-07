@@ -17,11 +17,11 @@ class Network:
         self.hidden_layer = [ { 'weights': np.random.uniform(low = -1.0 / np.sqrt(self.number_of_inputs), 
                                                              high = 1.0 / np.sqrt(self.number_of_inputs), 
                                                              size = self.number_of_inputs),  
-                                'bias': np.random.uniform()} for i in range(self.hidden_neurons) ]
-        self.output_neuron =  { 'weights':  np.random.uniform(low = -1.0 / np.sqrt(self.hidden_neurons), 
+                                'bias': 0.0} for i in range(self.hidden_neurons) ]
+        self.output_neuron =  { 'weights': np.random.uniform(low = -1.0 / np.sqrt(self.hidden_neurons), 
                                                              high = 1.0 / np.sqrt(self.hidden_neurons)  , 
                                                              size = self.hidden_neurons),
-                                 'bias' : np.random.uniform()}
+                                 'bias' : 0.0 }
         
     def sigmoid(self, x):
         return 1/(1 + np.exp(-x))
