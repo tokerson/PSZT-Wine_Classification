@@ -12,8 +12,9 @@ class Network:
     #user specyfies number of input nodes and how big should the hidden layer be
     def __init__(self, hidden_neurons = 20):
         self.number_of_inputs = 12
-        self.hidden_neurons = hidden_neurons
-        self.inputs = np.random.randint(low = 0 , high = 11, size = self.number_of_inputs) # array of random integers from 0 to 10 
+        self.hidden_neurons = 4#int(np.sqrt(12))
+        self.inputs = [ 0, 1 , 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11 ]
+        #self.inputs = np.random.randint(low = 0 , high = 11, size = self.number_of_inputs) # array of random integers from 0 to 10 
         self.hidden_layer = [ { 'weights': np.random.uniform(low = -1.0 / np.sqrt(self.number_of_inputs), 
                                                              high = 1.0 / np.sqrt(self.number_of_inputs), 
                                                              size = self.number_of_inputs),  
@@ -22,6 +23,7 @@ class Network:
                                                              high = 1.0 / np.sqrt(self.hidden_neurons)  , 
                                                              size = self.hidden_neurons),
                                  'bias' : 0.0 }
+
         
     def sigmoid(self, x):
         return 1/(1 + np.exp(-x))
@@ -45,20 +47,7 @@ class Network:
         return self.sigmoid(output)
 
 network = Network()
-
-print("inputs:")
-print(network.inputs)
-print("weights:")
-for neuron in network.hidden_layer:
-    print("Weights: \n", neuron['weights'])
-    print("Bias: ", neuron['bias'])
     
 print("Output", network.feed_forward())
-# print("Bias:", network.hidden_layer[0]['bias'])
-
-# print("Result:", network.feed_forward(0))
-# print(network.inputs)
-# print(network.hidden_layer)
-# print(network.hidden_layer[0]['weights'][0])
     
 
