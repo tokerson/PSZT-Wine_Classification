@@ -49,7 +49,7 @@ def find_max(data):
     maxes = []
     for i in range(0, 11):
         for j in range(0, len(data)):
-            if (data[j][i] > max):
+            if data[j][i] > max:
                 max = data[j][i]
         maxes.append(max)
         max = 0.0

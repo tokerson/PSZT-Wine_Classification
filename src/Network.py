@@ -6,7 +6,7 @@ from src.CsvReader import *
 
 class Network:
 
-    def __init__(self, inputSize=11, hiddenSize=4):
+    def __init__(self, inputSize=11, hiddenSize=6):
         self.outputSize = 1
         self.learningRate = 0.05
         self.input_size = inputSize
@@ -73,7 +73,7 @@ class Network:
 #     network.backward_propagation(0.5, result, [7.4, 0.7, 0.0, 1.9, 0.076, 11.0, 34.0, 0.9978, 3.51, 0.56, 9.4])
 
 network = Network()
-network.learningRate = 0.5
+network.learningRate = 0.1
 
 whole_data = get_normalized_data()
 edge_row = 1300
@@ -86,7 +86,7 @@ testing_outputs = []
 seperate_inputs_and_outputs(training_data, training_outputs)
 seperate_inputs_and_outputs(testing_data, testing_outputs)
 
-n_epoch = 5000
+n_epoch = 100
 
 for i in range(0, n_epoch):
     loss_sum = 0
@@ -96,7 +96,8 @@ for i in range(0, n_epoch):
         #print("Epoch= %d, data_row=%f, error=%f, expected=%f" % (i, j, result, training_outputs[j][0]))
         loss_sum += abs(result - training_outputs[j][0])
 
-    #print("Epoch %d, loss sum = %f" %(i, loss_sum))
+    print("Epoch %d, loss sum = %f" %(i, loss_sum))
+
 
 wrong = 0
 correct = 0
@@ -105,6 +106,7 @@ for i in range(0, len(testing_data)):
     result = network.feed_forward(testing_data[i])
     if round(result, 1) == testing_outputs[i][0]:
         print("ROW %d - CORRECT" % i)
+        print(result, testing_outputs[i][0])
         correct += 1
     else:
         print("ROW %d - WRONG!!!" % i)
