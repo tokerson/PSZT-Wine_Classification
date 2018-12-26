@@ -29,7 +29,7 @@ class Network:
         Z2 = (np.asmatrix(np.dot(self.A1, self.W2)) + np.asmatrix(self.B2)).getA()
         output = self.sigmoid(Z2)
 
-        return output
+        return output[0][0]
 
     def backward_propagation(self, expected, calculated, input):
         output_loss = (expected - calculated) * self.sigmoid_derivative(calculated)
@@ -64,10 +64,52 @@ class Network:
         self.B2 = (np.asmatrix(self.B2) + update_B2 * self.learningRate).getA()
 
 
-network = Network()
-network.learningRate = 0.4
+# network = Network()
+# network.learningRate = 0.4
+#
+# for i in range(1, 12):
+#     result = network.feed_forward([7.4, 0.7, 0.0, 1.9, 0.076, 11.0, 34.0, 0.9978, 3.51, 0.56, 9.4]) #expected 5
+#     print(result)
+#     network.backward_propagation(0.5, result, [7.4, 0.7, 0.0, 1.9, 0.076, 11.0, 34.0, 0.9978, 3.51, 0.56, 9.4])
 
-for i in range(1, 12):
-    result = network.feed_forward([7.4, 0.7, 0.0, 1.9, 0.076, 11.0, 34.0, 0.9978, 3.51, 0.56, 9.4]) #expected 5
-    print(result)
-    network.backward_propagation(0.5, result[0][0], [7.4, 0.7, 0.0, 1.9, 0.076, 11.0, 34.0, 0.9978, 3.51, 0.56, 9.4])
+network = Network()
+network.learningRate = 0.5
+
+whole_data = get_normalized_data()
+edge_row = 1300
+training_data = get_training_data(edge_row, whole_data)
+testing_data = get_testing_data(edge_row, whole_data)
+
+training_outputs = []
+testing_outputs = []
+
+seperate_inputs_and_outputs(training_data, training_outputs)
+seperate_inputs_and_outputs(testing_data, testing_outputs)
+
+n_epoch = 5000
+
+for i in range(0, n_epoch):
+    loss_sum = 0
+    for j in range(0, len(training_data)):
+        result = network.feed_forward(training_data[j])
+        network.backward_propagation(training_outputs[j][0], result, training_data[j])
+        #print("Epoch= %d, data_row=%f, error=%f, expected=%f" % (i, j, result, training_outputs[j][0]))
+        loss_sum += abs(result - training_outputs[j][0])
+
+    #print("Epoch %d, loss sum = %f" %(i, loss_sum))
+
+wrong = 0
+correct = 0
+print("\n===TESTING===\n")
+for i in range(0, len(testing_data)):
+    result = network.feed_forward(testing_data[i])
+    if round(result, 1) == testing_outputs[i][0]:
+        print("ROW %d - CORRECT" % i)
+        correct += 1
+    else:
+        print("ROW %d - WRONG!!!" % i)
+        print(result, testing_outputs[i][0])
+        wrong += 1
+
+print("CORRECT: %d WRONG: %d  ratio = %f" %(correct, wrong, correct/len(testing_data) * 100))
+
