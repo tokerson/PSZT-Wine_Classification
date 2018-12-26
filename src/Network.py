@@ -4,6 +4,18 @@ import numpy as np
 from src.CsvReader import *
 
 
+def get_rating(result):
+    good = 0.65
+    avg = 0.45
+
+    if result >= good:
+        return "good"
+    elif result >= avg:
+        return "average"
+    else:
+        return "bad"
+
+
 class Network:
 
     def __init__(self, inputSize=11, hiddenSize=6):
@@ -36,7 +48,7 @@ class Network:
 
         hidden_loss = []
         for i in range(0, self.hidden_size):
-            hidden_loss.append(output_loss*self.W2[i, 0] * self.sigmoid_derivative(self.A1[0, i]))
+            hidden_loss.append(output_loss * self.W2[i, 0] * self.sigmoid_derivative(self.A1[0, i]))
 
         update_W1 = [[0.0 for x in range(self.hidden_size)] for y in range(self.input_size)]
         for i in range(0, self.input_size):
@@ -93,18 +105,18 @@ for i in range(0, n_epoch):
     for j in range(0, len(training_data)):
         result = network.feed_forward(training_data[j])
         network.backward_propagation(training_outputs[j][0], result, training_data[j])
-        #print("Epoch= %d, data_row=%f, error=%f, expected=%f" % (i, j, result, training_outputs[j][0]))
+        # print("Epoch= %d, data_row=%f, error=%f, expected=%f" % (i, j, result, training_outputs[j][0]))
         loss_sum += abs(result - training_outputs[j][0])
 
-    print("Epoch %d, loss sum = %f" %(i, loss_sum))
-
+    print("Epoch %d, loss sum = %f" % (i, loss_sum))
 
 wrong = 0
 correct = 0
 print("\n===TESTING===\n")
 for i in range(0, len(testing_data)):
-    result = network.feed_forward(testing_data[i])
-    if round(result, 1) == testing_outputs[i][0]:
+    result = network.feed_forward(testing_data[i]) \
+        # if round(result, 1) == testing_outputs[i][0]:
+    if get_rating(result) == get_rating(testing_outputs[i][0]):
         print("ROW %d - CORRECT" % i)
         print(result, testing_outputs[i][0])
         correct += 1
@@ -113,5 +125,4 @@ for i in range(0, len(testing_data)):
         print(result, testing_outputs[i][0])
         wrong += 1
 
-print("CORRECT: %d WRONG: %d  ratio = %f" %(correct, wrong, correct/len(testing_data) * 100))
-
+print("CORRECT: %d WRONG: %d  ratio = %f" % (correct, wrong, correct / len(testing_data) * 100))
