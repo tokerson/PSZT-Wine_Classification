@@ -15,18 +15,40 @@ def get_rating(result):
     else:
         return "bad"
 
+def save_network_to_file(network, filename):
+    file = open(filename, "w")
+    file.write(str(network.input_size) + "\n")
+    file.write(str(network.hidden_size) + "\n")
+    file.write(str(network.output_size) + "\n")
+    for i in range(0, network.input_size):
+        for j in range(0, network.hidden_size):
+            file.write(str(network.W1[i][j]) + " ")
+        file.write("\n")
+
+    for i in range(0, network.hidden_size):
+        for j in range(0, network.output_size):
+            file.write(str(network.W2[i][j]) + " ")
+        file.write("\n")
+
+    for i in range(0, network.hidden_size):
+        file.write(str(network.B1[0][i]) + " ")
+
+    file.write("\n")
+    file.write(str(network.B2[0][0]) + "\n")
+
+
 
 class Network:
 
-    def __init__(self, inputSize=11, hiddenSize=6):
-        self.outputSize = 1
-        self.learningRate = 0.05
+    def __init__(self, inputSize=11, hiddenSize=4):
+        self.output_size = 1
+        #self.learningRate = 0.05
         self.input_size = inputSize
         self.hidden_size = hiddenSize
         self.W1 = np.random.randn(inputSize, hiddenSize) / np.sqrt(inputSize)
-        self.W2 = np.random.randn(hiddenSize, self.outputSize) / np.sqrt(hiddenSize)
+        self.W2 = np.random.randn(hiddenSize, self.output_size) / np.sqrt(hiddenSize)
         self.B1 = np.zeros((1, hiddenSize))
-        self.B2 = np.zeros((1, self.outputSize))
+        self.B2 = np.zeros((1, self.output_size))
         self.A1 = None
 
     def sigmoid(self, x):
@@ -85,12 +107,14 @@ class Network:
 #     network.backward_propagation(0.5, result, [7.4, 0.7, 0.0, 1.9, 0.076, 11.0, 34.0, 0.9978, 3.51, 0.56, 9.4])
 
 network = Network()
-network.learningRate = 0.1
+network.learningRate = 0.2
 
 whole_data = get_normalized_data()
-edge_row = 1300
+edge_row = 1200
 training_data = get_training_data(edge_row, whole_data)
 testing_data = get_testing_data(edge_row, whole_data)
+# training_data = get_specific_data(0, edge_row, whole_data)
+# testing_data = get_specific_data(edge_row, len(whole_data), whole_data, "t")
 
 training_outputs = []
 testing_outputs = []
@@ -98,31 +122,37 @@ testing_outputs = []
 seperate_inputs_and_outputs(training_data, training_outputs)
 seperate_inputs_and_outputs(testing_data, testing_outputs)
 
-n_epoch = 100
+n_epoch = 500
 
-for i in range(0, n_epoch):
-    loss_sum = 0
-    for j in range(0, len(training_data)):
-        result = network.feed_forward(training_data[j])
-        network.backward_propagation(training_outputs[j][0], result, training_data[j])
-        # print("Epoch= %d, data_row=%f, error=%f, expected=%f" % (i, j, result, training_outputs[j][0]))
-        loss_sum += abs(result - training_outputs[j][0])
+# for i in range(0, n_epoch):
+#     loss_sum = 0
+#     for j in range(0, len(training_data)):
+#         result = network.feed_forward(training_data[j])
+#         network.backward_propagation(training_outputs[j][0], result, training_data[j])
+#         # print("Epoch= %d, data_row=%f, error=%f, expected=%f" % (i, j, result, training_outputs[j][0]))
+#         loss_sum += abs(result - training_outputs[j][0])
+#
+#     print("Epoch %d, loss sum = %f" % (i, loss_sum))
+#
+# wrong = 0
+# correct = 0
+# print("\n===TESTING===\n")
+# for i in range(0, len(testing_data)):
+#     result = network.feed_forward(testing_data[i]) \
+#         # if round(result, 1) == testing_outputs[i][0]:
+#     if get_rating(result) == get_rating(testing_outputs[i][0]):
+#         print("ROW %d - CORRECT" % i)
+#         print(result, testing_outputs[i][0])
+#         correct += 1
+#     else:
+#         print("ROW %d - WRONG!!! \n %f %f" % (i, result, testing_outputs[i][0]))
+#         print(result, testing_outputs[i][0])
+#         wrong += 1
+#
+# print("CORRECT: %d WRONG: %d  ratio = %f" % (correct, wrong, correct / len(testing_data) * 100))
 
-    print("Epoch %d, loss sum = %f" % (i, loss_sum))
-
-wrong = 0
-correct = 0
-print("\n===TESTING===\n")
-for i in range(0, len(testing_data)):
-    result = network.feed_forward(testing_data[i]) \
-        # if round(result, 1) == testing_outputs[i][0]:
-    if get_rating(result) == get_rating(testing_outputs[i][0]):
-        print("ROW %d - CORRECT" % i)
-        print(result, testing_outputs[i][0])
-        correct += 1
-    else:
-        print("ROW %d - WRONG!!!" % i)
-        print(result, testing_outputs[i][0])
-        wrong += 1
-
-print("CORRECT: %d WRONG: %d  ratio = %f" % (correct, wrong, correct / len(testing_data) * 100))
+print(network.W1)
+print(network.W2)
+print(network.B1)
+print(network.B2)
+save_network_to_file(network, "network.txt")

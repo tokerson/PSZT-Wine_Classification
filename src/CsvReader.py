@@ -31,6 +31,20 @@ def get_data(last_row, filename):
 
     return data
 
+def get_specific_data(first_row, last_row, data, type="n"):
+    spec_data = []
+    if first_row < 0 or last_row > len(data):
+        return None
+    for i in range(first_row, last_row):
+        spec_data.append(copy.deepcopy(data[i]))
+        if((data[i][11] >= 0.7 or data[i][11] <= 0.4) and type != "t"):
+            spec_data.append(copy.deepcopy(data[i]))
+            spec_data.append(copy.deepcopy(data[i]))
+            spec_data.append(copy.deepcopy(data[i]))
+            spec_data.append(copy.deepcopy(data[i]))
+            spec_data.append(copy.deepcopy(data[i]))
+
+    return spec_data
 
 # you need to pass two existing arrays : data and outputs.
 # Outputs should be an empty array, and data should be an array
