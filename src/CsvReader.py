@@ -31,6 +31,9 @@ def get_data(last_row, filename):
 
     return data
 
+
+#ugly function multiplying rare examples in training sets
+#type "t" means testing, and we do not want to multiply those examples there
 def get_specific_data(first_row, last_row, data, type="n"):
     spec_data = []
     if first_row < 0 or last_row > len(data):
