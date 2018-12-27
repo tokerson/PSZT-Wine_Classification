@@ -19,7 +19,7 @@ def save_network_to_file(network, filename):
     file = open(filename, "w")
     file.write(str(network.input_size) + "\n")
     file.write(str(network.hidden_size) + "\n")
-    file.write(str(network.output_size) + "\n")
+
     for i in range(0, network.input_size):
         for j in range(0, network.hidden_size):
             file.write(str(network.W1[i][j]) + " ")
@@ -36,7 +36,31 @@ def save_network_to_file(network, filename):
     file.write("\n")
     file.write(str(network.B2[0][0]) + "\n")
 
+def load_network_from_file(filename):
+    try:
+        file = open(filename, "r")
+    except OSError:
+        print("No such file")
+        return None
 
+    input_size = int(file.readline())
+    hidden_size = int(file.readline())
+
+    W1 = [[float(n) for n in file.readline().split()] for y in range(input_size)]
+
+    W2 = [[float(n) for n in file.readline().split()] for y in range(hidden_size)]
+
+    B1 = [[float(n) for n in file.readline().split()]]
+
+    B2 = [[float(n) for n in file.readline().split()]]
+
+    network = Network(input_size, hidden_size)
+    network.W1 = W1
+    network.W2 = W2
+    network.B1 = B1
+    network.B2 = B2
+
+    return network
 
 class Network:
 
@@ -151,8 +175,11 @@ n_epoch = 500
 #
 # print("CORRECT: %d WRONG: %d  ratio = %f" % (correct, wrong, correct / len(testing_data) * 100))
 
-print(network.W1)
-print(network.W2)
-print(network.B1)
-print(network.B2)
+
 save_network_to_file(network, "network.txt")
+network2 = load_network_from_file("network.txt")
+print(network2.W1)
+print(network2.W2)
+print(network2.B1)
+print(network2.B2)
+
