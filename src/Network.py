@@ -1,7 +1,7 @@
 import numpy as np
 
 # from src.CsvReader import get_data, normalize_data, seperate_inputs_and_outputs
-from src.CsvReader import *
+from CsvReader import *
 
 
 def get_rating(result):
@@ -66,7 +66,7 @@ class Network:
 
     def __init__(self, inputSize=11, hiddenSize=4):
         self.output_size = 1
-        #self.learningRate = 0.05
+        self.learningRate = 0.05
         self.input_size = inputSize
         self.hidden_size = hiddenSize
         self.W1 = np.random.randn(inputSize, hiddenSize) / np.sqrt(inputSize)
@@ -130,39 +130,39 @@ class Network:
 #     print(result)
 #     network.backward_propagation(0.5, result, [7.4, 0.7, 0.0, 1.9, 0.076, 11.0, 34.0, 0.9978, 3.51, 0.56, 9.4])
 
-network = Network()
-network.learningRate = 0.2
+# network = Network()
+# network.learningRate = 0.2
 
-whole_data = get_normalized_data()
-edge_row = 1200
-training_data = get_training_data(edge_row, whole_data)
-testing_data = get_testing_data(edge_row, whole_data)
-# training_data = get_specific_data(0, edge_row, whole_data)
-# testing_data = get_specific_data(edge_row, len(whole_data), whole_data, "t")
+# whole_data = get_normalized_data('../data/winequality-red.csv')
+# edge_row = 1200
+# training_data = get_training_data(edge_row, whole_data)
+# testing_data = get_testing_data(edge_row, whole_data)
 
-training_outputs = []
-testing_outputs = []
+# training_inputs = []
+# training_outputs = []
+# testing_inputs = []
+# testing_outputs = []
 
-seperate_inputs_and_outputs(training_data, training_outputs)
-seperate_inputs_and_outputs(testing_data, testing_outputs)
+# seperate_inputs_and_outputs(training_data, training_inputs, training_outputs)
+# seperate_inputs_and_outputs(testing_data, testing_inputs, testing_outputs)
 
-n_epoch = 500
+# n_epoch = 500
 
 # for i in range(0, n_epoch):
 #     loss_sum = 0
 #     for j in range(0, len(training_data)):
-#         result = network.feed_forward(training_data[j])
-#         network.backward_propagation(training_outputs[j][0], result, training_data[j])
+#         result = network.feed_forward(training_inputs[j])
+#         network.backward_propagation(training_outputs[j][0], result, training_inputs[j])
 #         # print("Epoch= %d, data_row=%f, error=%f, expected=%f" % (i, j, result, training_outputs[j][0]))
 #         loss_sum += abs(result - training_outputs[j][0])
-#
+
 #     print("Epoch %d, loss sum = %f" % (i, loss_sum))
-#
+
 # wrong = 0
 # correct = 0
 # print("\n===TESTING===\n")
 # for i in range(0, len(testing_data)):
-#     result = network.feed_forward(testing_data[i]) \
+#     result = network.feed_forward(testing_inputs[i]) \
 #         # if round(result, 1) == testing_outputs[i][0]:
 #     if get_rating(result) == get_rating(testing_outputs[i][0]):
 #         print("ROW %d - CORRECT" % i)
@@ -172,14 +172,14 @@ n_epoch = 500
 #         print("ROW %d - WRONG!!! \n %f %f" % (i, result, testing_outputs[i][0]))
 #         print(result, testing_outputs[i][0])
 #         wrong += 1
-#
-# print("CORRECT: %d WRONG: %d  ratio = %f" % (correct, wrong, correct / len(testing_data) * 100))
+
+# print("CORRECT: %d WRONG: %d  ratio = %f" % (correct, wrong, correct / len(testing_inputs) * 100))
 
 
-save_network_to_file(network, "network.txt")
-network2 = load_network_from_file("network.txt")
-print(network2.W1)
-print(network2.W2)
-print(network2.B1)
-print(network2.B2)
+# save_network_to_file(network, "network.txt")
+# network2 = load_network_from_file("network.txt")
+# print(network2.W1)
+# print(network2.W2)
+# print(network2.B1)
+# print(network2.B2)
 

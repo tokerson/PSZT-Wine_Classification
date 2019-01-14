@@ -31,21 +31,30 @@ def get_data(last_row, filename):
 
     return data
 
+def get_whole_data(filename):
+    data = []
+    with open(filename) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            try: 
+                float(row[0])
+                data.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])
+                    , float(row[5]), float(row[6]), float(row[7]), float(row[8]),
+                        float(row[9]), float(row[10]), float(row[11])])
+            except ValueError :
+                print("cannot convert to float")
+                
+    return data
+
 
 #ugly function multiplying rare examples in training sets
 #type "t" means testing, and we do not want to multiply those examples there
-def get_specific_data(first_row, last_row, data, type="n"):
+def get_specific_data(first_row, last_row, data):
     spec_data = []
     if first_row < 0 or last_row > len(data):
         return None
     for i in range(first_row, last_row):
         spec_data.append(copy.deepcopy(data[i]))
-        if((data[i][11] >= 0.7 or data[i][11] <= 0.4) and type != "t"):
-            spec_data.append(copy.deepcopy(data[i]))
-            spec_data.append(copy.deepcopy(data[i]))
-            spec_data.append(copy.deepcopy(data[i]))
-            spec_data.append(copy.deepcopy(data[i]))
-            spec_data.append(copy.deepcopy(data[i]))
 
     return spec_data
 
@@ -54,9 +63,12 @@ def get_specific_data(first_row, last_row, data, type="n"):
 # created by get_data function. As result this function modifies data array and outputs array.
 # Data array will contain only inputs and outputs array will contain only outputs.
 # Outputs is one-dimensional array.
-def seperate_inputs_and_outputs(data, outputs):
+def seperate_inputs_and_outputs(data, inputs, outputs):
+    #inputs = copy.deepcopy(data)
+
     for i in range(0, len(data)):
-        outputs.append([data[i].pop(11)])
+        inputs.append(data[i])
+        outputs.append([inputs[i].pop(11)])
 
 
 # this function finds 11 maximal values, for each wine's feature.
@@ -88,25 +100,54 @@ def normalize_data(data):
             data[j][i] = maxes[i]
 
 
-def get_normalized_data():
-    data = get_data(1600, '../data/winequality-red.csv')
+def get_normalized_data(filename):
+    data = get_whole_data(filename)
     normalize_data(data)
     return data
 
 
 def get_training_data(rowNumber, data):
-    trainingData = copy.deepcopy(data)
+    trainingData = []
 
-    for i in range(1598, rowNumber-1, -1):
-        del trainingData[i]
+    if( rowNumber > len(data)):
+        return data
+
+    for i in range(0, rowNumber):
+        trainingData.append(data[i])
 
     return trainingData
 
 
-def get_testing_data(rowNumber, data):
-    testingData = copy.deepcopy(data)
+def get_testing_data(rowNumber, last_row, data):
+    testingData = []
 
-    for i in range(0, rowNumber):
-        del testingData[0]
+    if(rowNumber > len(data)):
+        return []
+    for i in range(rowNumber, last_row):
+        testingData.append(data[i])
 
     return testingData
+
+def get_poor_wines(data):
+    poor = []
+    for i in range(0,len(data)):
+        if data[i][11] <= 0.45 : 
+            poor.append(data[i])
+
+    return poor
+
+def get_good_wines(data):
+    good = []
+    for i in range(0,len(data)):
+        if data[i][11] >= 0.65 : 
+            good.append(data[i])
+
+    return good
+
+def get_average_wines(data):
+    average = []
+    for i in range(0, len(data)):
+        if data[i][11] > 0.45 and data[i][11] < 0.65:
+            average.append(data[i])
+    
+    return average
