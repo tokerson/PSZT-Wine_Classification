@@ -40,6 +40,13 @@ for data in get_training_data(int(elements / 6), good_wines):
 for data in get_training_data(elements, average_wines):
     training_set.append(copy.deepcopy(data))
 
+# for data in get_training_data(40, poor_wines):
+#         training_set.append(data)
+# for data in get_training_data(40, good_wines):
+#         training_set.append(data)
+# for data in get_training_data(40, average_wines):
+#         training_set.append(data)
+
 # print(training_set)
 seperate_inputs_and_outputs(training_set, training_input_set, training_output_set)
 
@@ -47,6 +54,14 @@ testing_input_set = []
 testing_output_set = []
 testing_set = []
 
+# for data in get_testing_data(40, len(poor_wines), poor_wines):
+#     # for i in range(0, 21):
+#         testing_set.append(data)
+# for data in get_testing_data(40 , len(poor_wines), good_wines):
+#     # for i in range(0, 6):
+#         testing_set.append(data)
+# for data in get_testing_data(40, len(poor_wines), average_wines):
+#         testing_set.append(data)
 
 for data in get_testing_data(int(elements / 21), len(poor_wines), poor_wines):
     # for i in range(0, 21):
@@ -63,11 +78,11 @@ seperate_inputs_and_outputs(testing_set, testing_input_set, testing_output_set)
 network = Network()
 network.learningRate = 0.2
 
-n_epoch = 100
+n_epoch = 500
 times = []
 ratios = []
 epochs = []
-for i in range(10 , n_epoch, 10):
+for i in range(10 , n_epoch, 50):
         start = time.time()
         epochs.append(i)
         for j in range(0 , i):
@@ -100,4 +115,9 @@ for i in range(10 , n_epoch, 10):
 plt.plot( epochs, ratios , linestyle="-", marker='o')
 plt.xlabel("epochs")
 plt.ylabel("ratio")
-plt.savefig('../diagrams/testplot.png')
+
+plt.suptitle('learning rate = ' + repr(network.learningRate) + ' , ' + repr(elements) + ' elements of every wine in training set', fontSize=12)
+# plt.figtext(0.99, 0.01, "learning rate = 0.2 , 40 elements of every wine in training set", horizontalalignment='right')
+# plt.annotate("learning rate = 0.2 , 40 elements of every wine in training set", (0,0), (0, -40), xycoords='axes fraction', textcoords='offset points', va='top')
+
+plt.savefig('../diagrams/testplot3.png')
