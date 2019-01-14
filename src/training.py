@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-wines = get_normalized_data('../data/winequality-red.csv')
+wines = get_whole_data('../data/winequality-red.csv')
 poor_wines = get_poor_wines(wines)
 good_wines = get_good_wines(wines)
 average_wines = get_average_wines(wines)
@@ -25,67 +25,82 @@ average_wines = get_average_wines(wines)
 # seperate_inputs_and_outputs(average_wines, average_wines_inputs, average_wines_outputs)
 
 
-elements = 500
+elements = 40
 
 training_input_set = []
 training_output_set = []
 training_set = []
 
-for data in get_training_data(int(elements / 21), poor_wines):
-    for i in range(0, 21):
-        training_set.append(copy.deepcopy(data))
-for data in get_training_data(int(elements / 6), good_wines):
-    for i in range(0, 6):
-        training_set.append(copy.deepcopy(data))
-for data in get_training_data(elements, average_wines):
-    training_set.append(copy.deepcopy(data))
+# for data in get_training_data(int(elements / 21), poor_wines):
+#     for i in range(0, 21):
+#         training_set.append(copy.deepcopy(data))
+# for data in get_training_data(int(elements / 6), good_wines):
+#     for i in range(0, 6):
+#         training_set.append(copy.deepcopy(data))
+# for data in get_training_data(elements, average_wines):
+#     training_set.append(copy.deepcopy(data))
 
-# for data in get_training_data(40, poor_wines):
-#         training_set.append(data)
-# for data in get_training_data(40, good_wines):
-#         training_set.append(data)
-# for data in get_training_data(40, average_wines):
-#         training_set.append(data)
+for data in get_training_data(40, poor_wines):
+        training_set.append(data)
+for data in get_training_data(40, good_wines):
+        training_set.append(data)
+for data in get_training_data(40, average_wines):
+        training_set.append(data)
 
 # print(training_set)
 seperate_inputs_and_outputs(training_set, training_input_set, training_output_set)
+
+print(len(training_input_set))
+print(len(training_output_set))
+print(len(training_set))
+normalize_output(training_output_set)
 
 testing_input_set = []
 testing_output_set = []
 testing_set = []
 
-# for data in get_testing_data(40, len(poor_wines), poor_wines):
-#     # for i in range(0, 21):
-#         testing_set.append(data)
-# for data in get_testing_data(40 , len(poor_wines), good_wines):
-#     # for i in range(0, 6):
-#         testing_set.append(data)
-# for data in get_testing_data(40, len(poor_wines), average_wines):
-#         testing_set.append(data)
-
-for data in get_testing_data(int(elements / 21), len(poor_wines), poor_wines):
+for data in get_testing_data(40, len(poor_wines), poor_wines):
     # for i in range(0, 21):
-        testing_set.append(copy.deepcopy(data))
-for data in get_testing_data(int(elements / 6) , len(good_wines), good_wines):
+        testing_set.append(data)
+for data in get_testing_data(40 , len(poor_wines), good_wines):
     # for i in range(0, 6):
-        testing_set.append(copy.deepcopy(data))
-for data in get_testing_data(elements, len(average_wines), average_wines):
-    testing_set.append(copy.deepcopy(data))
+        testing_set.append(data)
+for data in get_testing_data(40, len(poor_wines), average_wines):
+        testing_set.append(data)
+
+
+
+# for data in get_testing_data(int(elements / 21), len(poor_wines), poor_wines):
+#     for i in range(0, 21):
+#         testing_set.append(copy.deepcopy(data))
+# for data in get_testing_data(int(elements / 6) , len(good_wines), good_wines):
+#     for i in range(0, 6):
+#         testing_set.append(copy.deepcopy(data))
+# for data in get_testing_data(elements, len(average_wines), average_wines):
+#     testing_set.append(copy.deepcopy(data))
 
 seperate_inputs_and_outputs(testing_set, testing_input_set, testing_output_set)
+print(len(testing_input_set))
+print(len(testing_output_set))
+print(len(testing_set))
+normalize_output(testing_output_set)
 
 
 network = Network()
-network.learningRate = 0.2
+network.learningRate = 0.01
 
-n_epoch = 500
+n_epoch = 800
 times = []
 ratios = []
 epochs = []
-for i in range(10 , n_epoch, 50):
+step = 20
+for i in range(10 , n_epoch, step):
         start = time.time()
-        epochs.append(i)
-        for j in range(0 , i):
+
+        if(i >= 300):
+                network.learningRate = 0.005
+
+        for j in range(0 , step):
                 loss_sum = 0
                 for k in range(0, len(training_input_set)):
                         result = network.feed_forward(training_input_set[k])
@@ -109,15 +124,17 @@ for i in range(10 , n_epoch, 50):
 
         end = time.time()
         times.append(end - start)
+        epochs.append(i)
         ratios.append(correct / len(testing_input_set) * 100)
         #print("CORRECT: %d WRONG: %d  ratio = %f" % (correct, wrong, correct / len(testing_input_set) * 100))
 
 plt.plot( epochs, ratios , linestyle="-", marker='o')
 plt.xlabel("epochs")
 plt.ylabel("ratio")
+plt.suptitle('red wine 40 elements of each wine lr=0.01 to 0.005->300e no norm', fontSize=12)
 
-plt.suptitle('learning rate = ' + repr(network.learningRate) + ' , ' + repr(elements) + ' elements of every wine in training set', fontSize=12)
+# plt.suptitle('learning rate = ' + repr(network.learningRate) + ' , ' + repr(elements) + ' elements of every wine in training set', fontSize=12)
 # plt.figtext(0.99, 0.01, "learning rate = 0.2 , 40 elements of every wine in training set", horizontalalignment='right')
 # plt.annotate("learning rate = 0.2 , 40 elements of every wine in training set", (0,0), (0, -40), xycoords='axes fraction', textcoords='offset points', va='top')
 
-plt.savefig('../diagrams/testplot3.png')
+plt.savefig('../diagrams/noNormred' + repr(elements) +'testplot' + repr(network.learningRate) + '.png')
