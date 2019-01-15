@@ -1,5 +1,6 @@
-from CsvReader import *
-from Network import Network, save_network_to_file, load_network_from_file, get_rating
+from src.CsvReader import *
+from src.Network import Network, save_network_to_file, load_network_from_file, get_rating
+from random import shuffle
 
 import matplotlib
 matplotlib.use('TkAgg')
@@ -7,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-wines = get_whole_data('../data/winequality-red.csv')
+wines = get_normalized_data('../data/winequality-red.csv')
 poor_wines = get_poor_wines(wines)
 good_wines = get_good_wines(wines)
 average_wines = get_average_wines(wines)
@@ -47,13 +48,15 @@ for data in get_training_data(40, good_wines):
 for data in get_training_data(40, average_wines):
         training_set.append(data)
 
+shuffle(training_set)
+
 # print(training_set)
 seperate_inputs_and_outputs(training_set, training_input_set, training_output_set)
 
 print(len(training_input_set))
 print(len(training_output_set))
 print(len(training_set))
-normalize_output(training_output_set)
+# normalize_output(training_output_set)
 
 testing_input_set = []
 testing_output_set = []
@@ -83,22 +86,42 @@ seperate_inputs_and_outputs(testing_set, testing_input_set, testing_output_set)
 print(len(testing_input_set))
 print(len(testing_output_set))
 print(len(testing_set))
-normalize_output(testing_output_set)
+#normalize_output(testing_output_set)
 
 
 network = Network()
-network.learningRate = 0.01
+network.learningRate = 0.2
 
-n_epoch = 800
+n_epoch = 5000
 times = []
 ratios = []
 epochs = []
-step = 20
-for i in range(10 , n_epoch, step):
+step = 100
+
+
+
+for i in range(0 , n_epoch, step):
         start = time.time()
 
-        if(i >= 300):
-                network.learningRate = 0.005
+        # if(i >= 1300):
+        #         network.learningRate = 0.1
+        # elif( i >= 1500):
+        #         network.learningRate = 0.05
+
+        if i >= 1200:
+                network.learningRate = 0.1
+        elif i>= 2000:
+                network.learningRate = 0.05
+        elif i>=3000:
+                network.learningRate = 0.001
+
+        if( i % 200 == 0 ):
+                shuffle(training_set)
+                training_input_set = []
+                training_output_set = []
+
+                # print(training_set)
+                seperate_inputs_and_outputs(training_set, training_input_set, training_output_set)
 
         for j in range(0 , step):
                 loss_sum = 0
@@ -138,3 +161,4 @@ plt.suptitle('red wine 40 elements of each wine lr=0.01 to 0.005->300e no norm',
 # plt.annotate("learning rate = 0.2 , 40 elements of every wine in training set", (0,0), (0, -40), xycoords='axes fraction', textcoords='offset points', va='top')
 
 plt.savefig('../diagrams/noNormred' + repr(elements) +'testplot' + repr(network.learningRate) + '.png')
+plt.show()
