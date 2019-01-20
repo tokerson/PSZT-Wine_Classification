@@ -131,7 +131,7 @@ def get_testing_data(rowNumber, last_row, data):
 def get_poor_wines(data):
     poor = []
     for i in range(0,len(data)):
-        if data[i][11] <= 0.45 :
+        if data[i][11] <= 0.65 :
             poor.append(data[i])
 
     return poor
@@ -144,13 +144,7 @@ def get_good_wines(data):
 
     return good
 
-def get_average_wines(data):
-    average = []
-    for i in range(0, len(data)):
-        if data[i][11] > 0.45 and data[i][11] < 0.65:
-            average.append(data[i])
-    
-    return average
+
 
 def normalize_output(data):
     for i in range(0, len(data)):
