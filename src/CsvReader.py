@@ -100,6 +100,16 @@ def normalize_data(data):
             data[j][i] = maxes[i]
 
 
+def normalize_row(row, whole_data):
+    maxes = find_max(whole_data)
+
+    for i in range(0, 11):
+        row[i] /= maxes[i]
+        if maxes[i] == 0:
+            row[i] = maxes[i]
+
+
+
 def get_normalized_data(filename):
     data = get_whole_data(filename)
     normalize_data(data)

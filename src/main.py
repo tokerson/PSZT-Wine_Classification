@@ -9,12 +9,13 @@ print("3 - Wczytanie sieci z pliku i sprawdzenie jakości podanego wina.")
 inp = input("Wprowadź liczbę:")
 user_input = int(inp)
 
-if user_input < 1 and user_input >3 :
+if 1 > user_input > 3:
     print("Błędna liczba")
 elif user_input == 1:
     print("Wybrano opcję 1.")
     file_name = input("Proszę wprowadzić nazwę pliku wyjściowego: ")
-    netw = train_network()
+    learing_rate = input("Proszę wprowadzić learning rate: ")
+    netw = train_network(float(learing_rate))
     save_network_to_file(netw,file_name)
 
 elif user_input == 2:

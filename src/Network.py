@@ -1,9 +1,5 @@
 import numpy as np
 
-# from src.CsvReader import get_data, normalize_data, seperate_inputs_and_outputs
-from src.CsvReader import *
-
-
 def get_rating(result):
     good = 0.65
 
