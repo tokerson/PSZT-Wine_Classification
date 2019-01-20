@@ -1,5 +1,5 @@
-from CsvReader import *
-from Network import Network, save_network_to_file, load_network_from_file, get_rating
+from src.CsvReader import *
+from src.Network import Network, save_network_to_file, load_network_from_file, get_rating
 from random import shuffle
 
 import matplotlib
@@ -93,7 +93,7 @@ def train_network():
     network = Network()
     network.learningRate = 0.2
 
-    n_epoch = 5000
+    n_epoch = 1000
     times = []
     ratios = []
     epochs = []

@@ -1,5 +1,5 @@
-from training import *
-from Network import *
+from src.training import *
+from src.Network import *
 
 
 print("1 - Wytrenowanie nowej sieci i zapis do pliku.")
