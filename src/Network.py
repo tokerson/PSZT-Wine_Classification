@@ -122,6 +122,7 @@ class Network:
         self.B2 = (np.asmatrix(self.B2) + update_B2 * self.learningRate).getA()
 
 
+# print("CORRECT: %d WRONG: %d  ratio = %f" % (correct, wrong, correct / len(testing_inputs) * 100))
 # network = Network()
 # network.learningRate = 0.4
 #
