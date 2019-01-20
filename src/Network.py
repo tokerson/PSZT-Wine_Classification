@@ -1,7 +1,7 @@
 import numpy as np
 
 # from src.CsvReader import get_data, normalize_data, seperate_inputs_and_outputs
-from CsvReader import *
+from src.CsvReader import *
 
 
 def get_rating(result):
@@ -117,4 +117,3 @@ class Network:
         ])
 
         self.B2 = (np.asmatrix(self.B2) + update_B2 * self.learningRate).getA()
-
