@@ -1,0 +1,7 @@
+poor wines = 63
+good wines = 217
+average wines = 1319
+all wines = 1599 
+1319 / 63 = 21
+1319 / 217 = 6
+
