@@ -1,5 +1,5 @@
 from src.CsvReader import *
-from src.Network import Network, save_network_to_file, load_network_from_file, get_rating
+from src.Network import Network, get_rating
 from random import shuffle
 
 import matplotlib
@@ -73,7 +73,7 @@ def test_network_manually(network):
     print(get_rating(result))
 
 
-def train_network(lr):
+def train_network(lr, n_epoch, filename):
     wines = get_normalized_data('../data/winequality-red.csv')
     poor_wines = get_poor_wines(wines)  # only wines with quality less than 6.5
     good_wines = get_good_wines(wines)  # only wines with quality greater than 6.5
@@ -91,10 +91,6 @@ def train_network(lr):
     copies_of_good_wines = int(
         nr_of_poor_wines / nr_of_good_wines)  # amount of copies of good wines so the amount of good and poor wines is the same
 
-    print("Good = " + str(nr_of_good_wines))
-    print("Poor = " + str(nr_of_poor_wines))
-    print("Copies = " + str(copies_of_good_wines))
-
     for data in get_training_data(nr_of_poor_wines, poor_wines):
         training_set.append(copy.deepcopy(data))
     for data in get_training_data(nr_of_good_wines, good_wines):
@@ -104,10 +100,6 @@ def train_network(lr):
     shuffle(training_set)
 
     seperate_inputs_and_outputs(training_set, training_input_set, training_output_set)
-
-    print(len(training_input_set))
-    print(len(training_output_set))
-    print(len(training_set))
 
     testing_input_set = []
     testing_output_set = []
@@ -121,16 +113,10 @@ def train_network(lr):
             testing_set.append(copy.deepcopy(data))
 
     seperate_inputs_and_outputs(testing_set, testing_input_set, testing_output_set)
-    print(len(testing_input_set))
-    print(len(testing_output_set))
-    print(len(testing_set))
 
     network = Network()
-    network.learningRate = 0.05
 
     copy_network = copy.deepcopy(network)
-
-    n_epoch = 400
 
     step = 20
 
@@ -168,7 +154,7 @@ def train_network(lr):
     plt.plot(epochs, ratios, linestyle="-", marker='o')
     plt.xlabel("epochs")
     plt.ylabel("ratio")
-    plt.suptitle('train-set ' + str(training_size) + " lr=0.08", fontSize=12)
+    plt.suptitle('train-set ' + str(training_size) + ' learning rate: ' + str(lr), fontSize=12)
 
-    plt.savefig('../diagrams/loweringLR3.png')
+    plt.savefig('../diagrams/'+str(filename)+'.png')
     return network

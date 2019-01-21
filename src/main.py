@@ -13,9 +13,11 @@ if 1 > user_input > 3:
     print("Błędna liczba")
 elif user_input == 1:
     print("Wybrano opcję 1.")
-    file_name = input("Proszę wprowadzić nazwę pliku wyjściowego: ")
+    file_name = input("Proszę wprowadzić nazwę pliku wyjściowego sieci: ")
+    picture_name = input("Proszę wprowadzić nazwę pliku, w ktorym znajdzie sie wykres: ")
     learing_rate = input("Proszę wprowadzić learning rate: ")
-    netw = train_network(float(learing_rate))
+    epochs = input("Proszę wprowadzić ilość epok: ")
+    netw = train_network(float(learing_rate), int(epochs), picture_name)
     save_network_to_file(netw,file_name)
 
 elif user_input == 2:
