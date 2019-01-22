@@ -1,6 +1,7 @@
 from src.CsvReader import *
 from src.Network import Network, get_rating
 from random import shuffle
+from src.NetworkCupy import NetworkCupy
 
 import matplotlib
 
@@ -73,7 +74,7 @@ def test_network_manually(network):
     print(get_rating(result))
 
 
-def train_network(lr, n_epoch, filename):
+def train_network(use_cupy, lr, n_epoch, filename):
     wines = get_normalized_data('../data/winequality-red.csv')
     poor_wines = get_poor_wines(wines)  # only wines with quality less than 6.5
     good_wines = get_good_wines(wines)  # only wines with quality greater than 6.5
@@ -114,7 +115,10 @@ def train_network(lr, n_epoch, filename):
 
     seperate_inputs_and_outputs(testing_set, testing_input_set, testing_output_set)
 
-    network = Network()
+    if not use_cupy:
+        network = Network()
+    else:
+        network = NetworkCupy()
 
     copy_network = copy.deepcopy(network)
 
@@ -156,5 +160,5 @@ def train_network(lr, n_epoch, filename):
     plt.ylabel("ratio")
     plt.suptitle('train-set ' + str(training_size) + ' learning rate: ' + str(lr), fontSize=12)
 
-    plt.savefig('../diagrams/'+str(filename)+'.png')
+    plt.savefig('../diagrams/' + str(filename) + '.png')
     return network
