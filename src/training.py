@@ -4,10 +4,10 @@ from random import shuffle
 from src.NetworkCupy import NetworkCupy
 
 import matplotlib
-
-matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import time
+
+matplotlib.use('TkAgg')
 
 
 def test_network_automatically(network):
