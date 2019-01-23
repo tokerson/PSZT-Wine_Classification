@@ -14,23 +14,22 @@ Neural network written in Python telling if wine is good or not.
 
     pipenv run python <file>
 
-<h5>Adding dependencies</h5>
+<h4>Adding dependencies</h4>
 
     pipenv install <name_of_dependency>
 
-<h5>Running program</h5>
+<h4>Running program</h4>
 <p>You can use import this project to PyCharm or run it from terminal.</p>
 <p>If you decide to use terminal, then you will have to delete all "src." from imports</p>
 <p>For example from src.Network change to from Network</p>
 <p>If you don't have Nvidia graphics card to use Cupy, then in file NetworkCupy.py change</p>
 <p>import cupy as cp -> import numpy as cp</p>
 
-<h5>Running in terminal<h5>
+<h4>Running in terminal</h4>
 <p>First activate pipenv shell by typing</p>
-    
-    pipenv shell 
-    
+
+    pipenv shell
+        
 <p>Then simply type</p>
 
     python main.py
-    
