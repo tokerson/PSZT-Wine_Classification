@@ -1,7 +1,7 @@
-from src.CsvReader import *
-from src.Network import Network, get_rating
+from CsvReader import *
+from Network import Network, get_rating
 from random import shuffle
-from src.NetworkCupy import NetworkCupy
+from NetworkCupy import NetworkCupy
 
 import matplotlib
 
